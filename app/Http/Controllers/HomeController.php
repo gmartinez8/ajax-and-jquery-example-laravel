@@ -26,4 +26,18 @@ class HomeController extends Controller
         $products = \App\Product::paginate();
         return view('home',compact('products'));
     }
+
+    public function deleteProduct(Request $request,$id)
+    {
+        if($request->ajax()){
+            $product = \App\Product::find($id);
+            $product->delete();
+            $productsTotal = \App\Product::all()->count();
+
+            return response()->json([
+                'total' => $productsTotal,
+                'message' => $product->name." was deleted successfully"
+            ]);
+        }
+    }
 }
